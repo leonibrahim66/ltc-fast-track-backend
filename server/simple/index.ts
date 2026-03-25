@@ -346,6 +346,7 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 
 // ─── Server Startup ───────────────────────────────────────────────────────────
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`[Server] Listening on port ${PORT}`);
   console.log(`[Database] ${DB_PATH}`);
