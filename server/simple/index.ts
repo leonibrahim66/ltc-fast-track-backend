@@ -180,7 +180,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
     const user = getOrCreateUser(phoneNumber);
     getOrCreateWallet(user.id);
 
-    const depositId = `PAWAPAY-${uuidv4().substring(0, 12).toUpperCase()}`;
+    const depositId = uuidv4();
 
     // 🔐 Call PawaPay Sandbox API
     const BASE_URL = 
