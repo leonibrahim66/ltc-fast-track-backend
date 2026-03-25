@@ -198,6 +198,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
         currency: "ZMW",
         country: "ZMB",
         customerTimestamp: new Date().toISOString(),
+        statementDescription: "LTC Deposit",
         payer: {
           type: "MSISDN",
           address: {
@@ -208,7 +209,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer eyJraWQiOiIxIiwiYWxnIjoiRVMyNTYifQ.eyJ0dCI6IkFBVCIsInN1YiI6IjI1NDciLCJtYXYiOiIxIiwiZXhwIjoyMDg5OTc4MDY3LCJpYXQiOjE3NzQzNTg4NjcsInBtIjoiREFGLFBBRiIsImp0aSI6ImFkOGFlZjdmLTkzNzYtNDVhYi1iYjE0LTIxZmNhNjVhNTQxZCJ9._r_I3AxWGOMVgzuFII97QWUI9t1ujLEkJU2Ob1kJg6ULJjDU3qcTJywEwiIHiwQ1FmqIaHWKapkHoww6bPSLdQ`,
+          Authorization: `Bearer ${process.env.PAWAPAY_API_KEY}`,
           "Content-Type": "application/json",
         },
       }
