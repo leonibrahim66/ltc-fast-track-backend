@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-console.log("API KEY EXISTS:", !!process.env.PAWAPAY_API_KEY);
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
@@ -132,11 +131,10 @@ app.post("/api/payments/pawapay", async (req, res) => {
         getOrCreateWallet(user.id);
         const depositId = `PAWAPAY-${(0, uuid_1.v4)().substring(0, 12).toUpperCase()}`;
         // 🔐 Call PawaPay Sandbox API
-        const BASE_URL = "https://api.pawapay.io";
+        const BASE_URL =
         process.env.NODE_ENV === "production"
             ? "https://api.pawapay.io"
             : "https://api.sandbox.pawapay.io";
-        console.log("API KEY:", process.env.PAWAPAY_API_KEY);
         const pawapayResponse = await axios_1.default.post(`${BASE_URL}/v1/deposits`, {
             depositId: depositId,
             amount: amount.toString(),
@@ -149,9 +147,11 @@ app.post("/api/payments/pawapay", async (req, res) => {
                 },
             },
             correspondent: "MTN_MOMO_ZMB",
+            callbackUrl:
+         "https://ltc-fast-track-backend-production.up.railway.app/api/payments/pawapay/callback",
         }, {
             headers: {
-                Authorization: `Bearer eyJraWQiOiIxIiwiYWxnIjoiRVMyNTYifQ.eyJ0dCI6IkFBVCIsInN1YiI6IjI1NDciLCJtYXYiOiIxIiwiZXhwIjoyMDg5OTc4MDY3LCJpYXQiOjE3NzQzNTg4NjcsInBtIjoiREFGLFBBRiIsImp0aSI6ImFkOGFlZjdmLTkzNzYtNDVhYi1iYjE0LTIxZmNhNjVhNTQxZCJ9._r_I3AxWGOMVgzuFII97QWUI9t1ujLEkJU2Ob1kJg6ULJjDU3qcTJywEwiIHiwQ1FmqIaHWKapkHoww6bPSLdQ`,
+                Authorization: `Bearer ${process.env.PAWAPAY_API_KEY}`,
                 "Content-Type": "application/json",
             },
         });
