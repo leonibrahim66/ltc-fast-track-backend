@@ -156,6 +156,18 @@ function getUserById(userId: string): User | undefined {
   return db.prepare("SELECT * FROM users WHERE id = ?").get(userId) as User | undefined;
 }
 
+function getCorrespondent(phone: string) {
+  if (phone.startsWith("26095") || phone.startsWith("26096")) {
+    return "MTN_MOMO_ZMB";
+  } else if (phone.startsWith("26097") || phone.startsWith("26077")) {
+    return "AIRTEL_OAPI_ZMB";
+  } else if (phone.startsWith("26076")) {
+    return "ZAMTEL_ZMB";
+  } else {
+    throw new Error("Unsupported network");
+  }
+}
+
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 // Health check
@@ -169,6 +181,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
     const { amount, phoneNumber } = req.body;
 
     const cleanPhone = phoneNumber.replace(/\D/g, "");
+    const correspondent = getCorrespondent(cleanPhone);
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ success: false, message: "Invalid amount", errorCode: "INVALID_AMOUNT" });
@@ -207,7 +220,9 @@ app.post("/api/payments/pawapay", async (req, res) => {
             value: cleanPhone,
           },
         },
-        correspondent: "MTN_MOMO_ZMB",
+        correspondent: correspondent,
+        callbackUrl:
+      "https://ltc-fast-track-backend-production.up.railway.app/api/payments/pawapay/callback",
       },
       {
         headers: {

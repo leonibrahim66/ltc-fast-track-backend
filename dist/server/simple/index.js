@@ -111,6 +111,20 @@ function getTransactionsByUserId(userId) {
 function getUserById(userId) {
     return db.prepare("SELECT * FROM users WHERE id = ?").get(userId);
 }
+function getCorrespondent(phone) {
+    if (phone.startsWith("26095") || phone.startsWith("26096")) {
+        return "MTN_MOMO_ZMB";
+    }
+    else if (phone.startsWith("26097") || phone.startsWith("26077")) {
+        return "AIRTEL_OAPI_ZMB";
+    }
+    else if (phone.startsWith("26076")) {
+        return "ZAMTEL_ZMB";
+    }
+    else {
+        throw new Error("Unsupported network");
+    }
+}
 // ─── Routes ───────────────────────────────────────────────────────────────────
 // Health check
 app.get("/api/health", (_req, res) => {
@@ -120,6 +134,8 @@ app.get("/api/health", (_req, res) => {
 app.post("/api/payments/pawapay", async (req, res) => {
     try {
         const { amount, phoneNumber } = req.body;
+        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        const correspondent = getCorrespondent(cleanPhone);
         if (!amount || amount <= 0) {
             return res.status(400).json({ success: false, message: "Invalid amount", errorCode: "INVALID_AMOUNT" });
         }
@@ -129,27 +145,27 @@ app.post("/api/payments/pawapay", async (req, res) => {
         // Get or create user + wallet
         const user = getOrCreateUser(phoneNumber);
         getOrCreateWallet(user.id);
-        const depositId = `PAWAPAY-${(0, uuid_1.v4)().substring(0, 12).toUpperCase()}`;
+        const depositId = (0, uuid_1.v4)();
         // 🔐 Call PawaPay Sandbox API
-        const BASE_URL =
-        process.env.NODE_ENV === "production"
+        const BASE_URL = process.env.NODE_ENV === "production"
             ? "https://api.pawapay.io"
             : "https://api.sandbox.pawapay.io";
+        console.log("API KEY:", process.env.PAWAPAY_API_KEY);
         const pawapayResponse = await axios_1.default.post(`${BASE_URL}/v1/deposits`, {
             depositId: depositId,
             amount: amount.toString(),
             currency: "ZMW",
             country: "ZMB",
             customerTimestamp: new Date().toISOString(),
+            statementDescription: "LTC Deposit",
             payer: {
                 type: "MSISDN",
                 address: {
-                    value: phoneNumber,
+                    value: cleanPhone,
                 },
             },
-            correspondent: "MTN_MOMO_ZMB",
-            callbackUrl:
-         "https://ltc-fast-track-backend-production.up.railway.app/api/payments/pawapay/callback",
+            correspondent: correspondent,
+            callbackUrl: "https://ltc-fast-track-backend-production.up.railway.app/api/payments/pawapay/callback",
         }, {
             headers: {
                 Authorization: `Bearer ${process.env.PAWAPAY_API_KEY}`,
