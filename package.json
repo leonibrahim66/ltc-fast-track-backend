@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "dev": "tsx server/simple/index.ts",
+    "start": "npx txs server/simple/index.ts"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "better-sqlite3": "^12.8.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "tsx": "^4.21.0",
+    "uuid": "^13.0.0"
+  }
+}
