@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
 const app = express();
-const PORT = parseInt(process.env.PORT || "3000", 10);
 
 // ─── Database Setup ───────────────────────────────────────────────────────────
 
