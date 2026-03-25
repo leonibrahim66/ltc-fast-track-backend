@@ -168,6 +168,8 @@ app.post("/api/payments/pawapay", async (req, res) => {
   try {
     const { amount, phoneNumber } = req.body;
 
+    const cleanPhone = phoneNumber.replace(/\D/g, "");
+
     if (!amount || amount <= 0) {
       return res.status(400).json({ success: false, message: "Invalid amount", errorCode: "INVALID_AMOUNT" });
     }
@@ -202,7 +204,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
         payer: {
           type: "MSISDN",
           address: {
-            value: phoneNumber,
+            value: cleanPhone,
           },
         },
         correspondent: "MTN_MOMO_ZMB",
