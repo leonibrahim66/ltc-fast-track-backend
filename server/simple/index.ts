@@ -183,7 +183,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
     const depositId = `PAWAPAY-${uuidv4().substring(0, 12).toUpperCase()}`;
 
     // 🔐 Call PawaPay Sandbox API
-    const BASE_URL = "https://api.pawapay.io" 
+    const BASE_URL = 
    process.env.NODE_ENV === "production"
     ? "https://api.pawapay.io"
     : "https://api.sandbox.pawapay.io";
