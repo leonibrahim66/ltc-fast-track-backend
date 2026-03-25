@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+console.log("API KEY EXISTS:", !!process.env.PAWAPAY_API_KEY);
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
@@ -274,8 +275,8 @@ app.use((err, _req, res, _next) => {
     }
 });
 // ─── Server Startup ───────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`[Server] Listening on port ${PORT}`);
     console.log(`[Database] ${DB_PATH}`);
     console.log(`[Health] http://localhost:${PORT}/api/health`);

@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
+
+console.log("API KEY EXISTS:", !!process.env.PAWAPAY_API_KEY);
+
 import express from "express";
 import path from "path";
 import fs from "fs";
@@ -345,8 +348,8 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 
 // ─── Server Startup ───────────────────────────────────────────────────────────
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`[Server] Listening on port ${PORT}`);
   console.log(`[Database] ${DB_PATH}`);
   console.log(`[Health] http://localhost:${PORT}/api/health`);
