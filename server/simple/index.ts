@@ -1,8 +1,5 @@
 import dotenv from "dotenv";
 dotenv.config();
-
-console.log("API KEY EXISTS:", !!process.env.PAWAPAY_API_KEY);
-
 import express from "express";
 import path from "path";
 import fs from "fs";
@@ -200,6 +197,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
         amount: amount.toString(),
         currency: "ZMW",
         country: "ZMB",
+        customerTimestamp: new Date().toISOString(),
         payer: {
           type: "MSISDN",
           address: {

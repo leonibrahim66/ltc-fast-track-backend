@@ -140,6 +140,7 @@ app.post("/api/payments/pawapay", async (req, res) => {
             amount: amount.toString(),
             currency: "ZMW",
             country: "ZMB",
+            customerTimestamp: new Date().toISOString(),
             payer: {
                 type: "MSISDN",
                 address: {
