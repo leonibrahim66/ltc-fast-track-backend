@@ -1,0 +1,19 @@
+{
+ "scripts": {
+  "build": "tsc",
+  "start": "node dist/server/simple/index.js"
+ },
+ "dependencies": {
+  "axios": "^1.13.6",
+  "better-sqlite3": "^12.8.0",
+  "dotenv": "^17.3.1",
+  "express": "^5.2.1",
+  "tsx": "^4.21.0",
+  "uuid": "^13.0.0"
+ },
+ "devDependencies": {
+  "@types/express": "^5.0.6",
+  "@types/node": "^25.5.0",
+  "typescript": "^6.0.2"
+ }
+}
